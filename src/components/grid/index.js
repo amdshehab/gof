@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import CellComponent from "../cell";
+import { Cell } from "../../reducers/grid-reducer";
 
 const mapStateToProps = ({
   gridReducer: { grid },
@@ -46,27 +47,36 @@ const GridManager = ({ grid, cycle, toggleActive, tickCycle }) => {
       bottomRight,
       bottomLeft = null;
 
-    if (i !== 0) {
-      top = grid[i + 1][n];
-      topRight = grid[i + 1][n + 1];
-      topLeft = grid[i + 1][n - 1];
-    }
+    const gridRightConstraint = () => n !== grid[i].length - 1;
+    const gridLeftConstraint = () => n !== 0;
+    const gridTopConstraint = () => i !== 0;
+    const gridBottomConstraint = () => i !== grid.length - 1;
 
-    if (i !== grid.length - 1) {
-      bottom = grid[i - 1][n];
-      bottomRight = grid[i - 1][n + 1];
-      bottomLeft = grid[i - 1][n - 1];
-    }
+    top = gridTopConstraint() && grid[i - 1][n].isActive;
+    topRight =
+      gridTopConstraint() &&
+      gridRightConstraint() &&
+      grid[i - 1][n + 1].isActive;
+    topLeft =
+      gridTopConstraint() &&
+      gridLeftConstraint() &&
+      grid[i - 1][n - 1].isActive;
 
-    if (n !== grid[i].length - 1) {
-      right = grid[i][n + 1];
-    }
+    bottom = gridBottomConstraint() && grid[i + 1][n].isActive;
+    bottomRight =
+      gridBottomConstraint() &&
+      gridRightConstraint() &&
+      grid[i + 1][n + 1].isActive;
+    bottomLeft =
+      gridBottomConstraint() &&
+      gridLeftConstraint() &&
+      grid[i + 1][n - 1].isActive;
 
-    if (n !== 0) {
-      left = grid[i][n - 1];
-    }
+    right = gridRightConstraint() && grid[i][n + 1].isActive;
 
-    return {
+    left = gridLeftConstraint() && grid[i][n - 1].isActive;
+
+    return [
       top,
       bottom,
       right,
@@ -75,21 +85,52 @@ const GridManager = ({ grid, cycle, toggleActive, tickCycle }) => {
       topLeft,
       bottomRight,
       bottomLeft
-    };
+    ];
+  };
+
+  const determineCellActive = (cellActive, surroundingCells) => {
+    const activeSurrounding = surroundingCells.filter(x => x === true).length;
+
+    if (!cellActive && activeSurrounding === 3) return true;
+
+    if (cellActive && activeSurrounding.length <= 1) return false;
+
+    if (cellActive && activeSurrounding.length >= 4) return false;
+
+    if (
+      cellActive &&
+      (activeSurrounding.length === 2 || activeSurrounding.length === 3)
+    )
+      return true;
+
+    return false;
   };
 
   const checkForChanges = () => {
-    for (let i = 0; i < grid.length; i++) {
-      for (let n = 0; n < grid[i].length; n++) {
-        const cell = grid[i][n];
-        console.log(checkSurroundings(i, n, grid));
+    const copyGrid = grid.slice();
+    const gridChanges = [];
+    for (let i = 0; i < copyGrid.length; i++) {
+      for (let n = 0; n < copyGrid[i].length; n++) {
+        const cell = copyGrid[i][n];
+        const surroundingCells = checkSurroundings(i, n, grid);
+        const nextCellState = determineCellActive(
+          cell.isActive,
+          surroundingCells
+        );
+        if (cell.isActive !== nextCellState) {
+          gridChanges.push([i, n, nextCellState]);
+        }
       }
     }
+    return gridChanges;
   };
 
+  const memoizeCheckGridChanges = useCallback(() => checkForChanges(), [grid]);
+
   useEffect(() => {
-    checkForChanges();
-  });
+    const something = memoizeCheckGridChanges();
+    console.log(something);
+  }, [cycle, memoizeCheckGridChanges]);
 
   return (
     <>
@@ -98,7 +139,12 @@ const GridManager = ({ grid, cycle, toggleActive, tickCycle }) => {
           {grid.map((row, i) => (
             <tr key={i}>
               {row.map((x, z) => (
-                <CellComponent isActive={x.isActive} key={z}></CellComponent>
+                <CellComponent
+                  isActive={x.isActive}
+                  indexMap={[i, z]}
+                  toggleActive={toggleActive}
+                  key={z}
+                ></CellComponent>
               ))}
             </tr>
           ))}

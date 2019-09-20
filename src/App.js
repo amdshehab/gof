@@ -1,10 +1,11 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
+import { enableBatching } from "redux-batched-actions";
 import reducer from "./reducers";
 import GridComponent from "./components/grid";
 
-const store = createStore(reducer);
+const store = createStore(enableBatching(reducer));
 
 function App() {
   return (

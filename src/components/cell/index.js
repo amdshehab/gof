@@ -6,6 +6,8 @@ const Column = styled.td`
   border: 0.1rem solid black;
 `;
 
-export default ({ isActive }) => {
-  return <Column>{isActive + ""}</Column>;
+export default ({ isActive, indexMap, toggleActive }) => {
+  return (
+    <Column onClick={() => toggleActive(indexMap)}>{isActive + ""}</Column>
+  );
 };
