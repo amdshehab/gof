@@ -2,7 +2,6 @@ import React, { useEffect, useCallback, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import CellComponent from "../cell";
-import { Cell } from "../../reducers/grid-reducer";
 
 const mapStateToProps = ({
   gridReducer: { grid },
