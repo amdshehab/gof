@@ -29,13 +29,15 @@ export default (state = initialState, action) => {
           i === action.indexMap[0] ? copySubArray : x
         )
       };
-    case "BATCH_TOGGLE":
+    case "BATCH_TOGGLE_ACTIVE":
+      console.log("im here----honest");
+
       const copyGrid = state.grid.map(arr =>
         arr.map(cell => Object.assign({}, cell))
       );
-
       for (let cellChange of action.cellChanges) {
-        copyGrid[cellChange[0][cellChange[1]]] = cellChange[2];
+        const [arr, i, state] = cellChange;
+        copyGrid[arr][i].isActive = state;
       }
 
       return {

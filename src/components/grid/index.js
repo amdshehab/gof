@@ -20,6 +20,11 @@ const mapDispatchToProps = dispatch => ({
       type: "TOGGLE_ACTIVE",
       indexMap
     }),
+  batchToggleActive: cellChanges =>
+    dispatch({
+      type: "BATCH_TOGGLE_ACTIVE",
+      cellChanges
+    }),
   tickCycle: () =>
     dispatch({
       type: "INCREMENT_CYCLE"
@@ -32,7 +37,13 @@ const Table = styled.table`
   border: 1px solid black;
 `;
 
-const GridManager = ({ grid, cycle, toggleActive, tickCycle }) => {
+const GridManager = ({
+  grid,
+  cycle,
+  toggleActive,
+  batchToggleActive,
+  tickCycle
+}) => {
   const handleClick = () => {
     tickCycle();
   };
@@ -93,16 +104,16 @@ const GridManager = ({ grid, cycle, toggleActive, tickCycle }) => {
 
     if (!cellActive && activeSurrounding === 3) return true;
 
-    if (cellActive && activeSurrounding.length <= 1) return false;
+    if (cellActive && activeSurrounding <= 1) return false;
 
-    if (cellActive && activeSurrounding.length >= 4) return false;
+    if (cellActive && activeSurrounding >= 4) return false;
 
-    if (
-      cellActive &&
-      (activeSurrounding.length === 2 || activeSurrounding.length === 3)
-    )
+    if (cellActive && (activeSurrounding === 2 || activeSurrounding === 3)) {
+      console.log("should come here");
+
       return true;
-
+    }
+    console.log("defaulting -------", cellActive, activeSurrounding);
     return false;
   };
 
@@ -113,6 +124,7 @@ const GridManager = ({ grid, cycle, toggleActive, tickCycle }) => {
       for (let n = 0; n < copyGrid[i].length; n++) {
         const cell = copyGrid[i][n];
         const surroundingCells = checkSurroundings(i, n, grid);
+        console.log("checking ->", i, n);
         const nextCellState = determineCellActive(
           cell.isActive,
           surroundingCells
@@ -130,7 +142,8 @@ const GridManager = ({ grid, cycle, toggleActive, tickCycle }) => {
   useEffect(() => {
     const something = memoizeCheckGridChanges();
     console.log(something);
-  }, [cycle, memoizeCheckGridChanges]);
+    batchToggleActive(something);
+  }, [cycle]);
 
   return (
     <>
