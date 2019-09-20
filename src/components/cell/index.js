@@ -7,10 +7,6 @@ const Column = styled.td`
   background-color: ${({ isActive }) => (isActive ? "blue" : "white")};
 `;
 
-export default ({ isActive, indexMap, toggleActive }) => {
-  return (
-    <Column isActive={isActive} onClick={() => toggleActive(indexMap)}>
-      {isActive + ""}
-    </Column>
-  );
-};
+export default ({ isActive, indexMap, toggleActive }) => (
+  <Column isActive={isActive} onClick={() => toggleActive(indexMap)} />
+);

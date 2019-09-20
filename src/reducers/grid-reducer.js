@@ -3,7 +3,7 @@ export const Cell = function(state) {
 };
 
 const initialState = {
-  grid: [...Array(10)].map(_ => [...Array(10)].map((_, i) => new Cell(false)))
+  grid: [...Array(20)].map(_ => [...Array(20)].map((_, i) => new Cell(false)))
 };
 
 export default (state = initialState, action) => {
@@ -30,8 +30,6 @@ export default (state = initialState, action) => {
         )
       };
     case "BATCH_TOGGLE_ACTIVE":
-      console.log("im here----honest");
-
       const copyGrid = state.grid.map(arr =>
         arr.map(cell => Object.assign({}, cell))
       );

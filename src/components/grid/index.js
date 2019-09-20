@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import CellComponent from "../cell";
@@ -44,8 +44,10 @@ const GridManager = ({
   batchToggleActive,
   tickCycle
 }) => {
+  const [automate, setAutomate] = useState(false);
+
   const handleClick = () => {
-    tickCycle();
+    setAutomate(state => !state);
   };
 
   const checkSurroundings = (i, n, grid) => {
@@ -109,11 +111,8 @@ const GridManager = ({
     if (cellActive && activeSurrounding >= 4) return false;
 
     if (cellActive && (activeSurrounding === 2 || activeSurrounding === 3)) {
-      console.log("should come here");
-
       return true;
     }
-    console.log("defaulting -------", cellActive, activeSurrounding);
     return false;
   };
 
@@ -124,7 +123,6 @@ const GridManager = ({
       for (let n = 0; n < copyGrid[i].length; n++) {
         const cell = copyGrid[i][n];
         const surroundingCells = checkSurroundings(i, n, grid);
-        console.log("checking ->", i, n);
         const nextCellState = determineCellActive(
           cell.isActive,
           surroundingCells
@@ -141,9 +139,15 @@ const GridManager = ({
 
   useEffect(() => {
     const something = memoizeCheckGridChanges();
-    console.log(something);
     batchToggleActive(something);
   }, [cycle]);
+
+  useEffect(() => {
+    if (automate) {
+      const id = setInterval(() => tickCycle(), 200);
+      return () => clearInterval(id);
+    }
+  }, [automate]);
 
   return (
     <>
