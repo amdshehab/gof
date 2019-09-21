@@ -7,6 +7,10 @@ const Column = styled.td`
   background-color: ${({ isActive }) => (isActive ? "blue" : "white")};
 `;
 
-export default ({ isActive, indexMap, toggleActive }) => (
-  <Column isActive={isActive} onClick={() => toggleActive(indexMap)} />
+const CellComponent = ({ isActive, toggleActive }) => (
+  <Column isActive={isActive} onClick={() => toggleActive()} />
 );
+
+export default React.memo(CellComponent, (prev, next) => {
+  return prev.isActive === next.isActive;
+});
