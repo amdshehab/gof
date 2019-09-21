@@ -3,7 +3,7 @@ export const Cell = function(state) {
 };
 
 const initialState = {
-  grid: [...Array(20)].map(_ => [...Array(20)].map((_, i) => new Cell(false)))
+  grid: [...Array(20)].map(_ => [...Array(40)].map((_, i) => new Cell(false)))
 };
 
 export default (state = initialState, action) => {

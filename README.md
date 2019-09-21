@@ -8,3 +8,4 @@
 - dropdown to select generation speed
 - maybe do something intresting with ML? (because why not)
 - some info on cell generation, etc..
+- Host on the cloud

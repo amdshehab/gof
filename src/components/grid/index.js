@@ -137,8 +137,8 @@ const GridManager = ({
   const memoizeCheckGridChanges = useCallback(() => checkForChanges(), [grid]);
 
   useEffect(() => {
-    const something = memoizeCheckGridChanges();
-    batchToggleActive(something);
+    const gridChanges = memoizeCheckGridChanges();
+    batchToggleActive(gridChanges);
   }, [cycle]);
 
   useEffect(() => {
