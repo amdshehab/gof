@@ -8,11 +8,14 @@ import GridInterface from "./components/grid-interface";
 const store = createStore(reducer);
 
 const MainContainer = styled.div`
-  height: 100vh;
-  background-color: #eee2dc;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  box-sizing: border-box;
+  height: 100vh;
+  padding: 50px;
+  background-color: #eee2dc;
 `;
 
 function App() {

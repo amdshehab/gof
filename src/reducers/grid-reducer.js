@@ -20,6 +20,23 @@ export default (state = initialState, action) => {
       return {
         grid: createGrid(rows, cols)
       };
+    case "CLEAR_GRID":
+      return {
+        ...state,
+        grid: state.grid.map(arr =>
+          arr.map(cell => ({ ...cell, isActive: false }))
+        )
+      };
+    case "RANDOMIZE_GRID":
+      return {
+        ...state,
+        grid: state.grid.map(arr =>
+          arr.map(cell => ({
+            ...cell,
+            isActive: Math.random() > 0.8 ? true : false
+          }))
+        )
+      };
     case "TOGGLE_ACTIVE":
       const gridCopy = state.grid.map(arr =>
         arr.map(cell => Object.assign({}, cell))

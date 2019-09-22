@@ -28,6 +28,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const Table = styled.table`
+  table-layout: fixed;
   border-collapse: collapse;
   border: 1px solid black;
 `;
