@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import CellComponent from "../cell";
@@ -24,44 +24,20 @@ const mapDispatchToProps = dispatch => ({
     dispatch({
       type: "BATCH_TOGGLE_ACTIVE",
       cellChanges
-    }),
-  tickCycle: () =>
-    dispatch({
-      type: "INCREMENT_CYCLE"
     })
 });
 
 const Table = styled.table`
-  margin: 0 auto;
   border-collapse: collapse;
   border: 1px solid black;
 `;
 
-const GridManager = ({
-  grid,
-  cycle,
-  toggleActive,
-  batchToggleActive,
-  tickCycle
-}) => {
-  const [automate, setAutomate] = useState(false);
-
-  const handleClick = () => {
-    setAutomate(state => !state);
-  };
-
+const GridManager = ({ grid, cycle, toggleActive, batchToggleActive }) => {
   const gridChanges = useCheckGridChanges(JSON.stringify(grid));
 
   useEffect(() => {
     batchToggleActive(gridChanges);
   }, [cycle]);
-
-  useEffect(() => {
-    if (automate) {
-      const id = setInterval(() => tickCycle(), 100);
-      return () => clearInterval(id);
-    }
-  }, [automate, tickCycle]);
 
   return (
     <>
@@ -80,7 +56,6 @@ const GridManager = ({
           ))}
         </tbody>
       </Table>
-      <button onClick={handleClick}>CLICK ME</button>
     </>
   );
 };

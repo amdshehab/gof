@@ -5,15 +5,20 @@ export const Cell = function(state) {
     .substring(7);
 };
 
+const createGrid = (rows, cols) => {
+  return [...Array(rows)].map(_ => [...Array(cols)].map(_ => new Cell(false)));
+};
+
 const initialState = {
-  grid: [...Array(20)].map(_ => [...Array(40)].map((_, i) => new Cell(false)))
+  grid: createGrid(20, 40)
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case "SETUP_GRID":
+    case "CREATE_NEW_MATRIX":
+      const { rows, cols } = action;
       return {
-        grid: [...state.grid, ...action.grid]
+        grid: createGrid(rows, cols)
       };
     case "TOGGLE_ACTIVE":
       const gridCopy = state.grid.map(arr =>
