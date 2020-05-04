@@ -1,4 +1,4 @@
-<a href="https://imgflip.com/gif/401wyw">via Imgflip</a>
+![GOF](https://imgflip.com/gif/401wyw)
 
 ## TODO
 
