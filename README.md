@@ -1,13 +1,25 @@
-<a href="https://imgflip.com/gif/401wyw">via Imgflip</a>
+# Conway's game of life
+
+Conway's game of life built using Redux + Hooks
+
+## Getting Started
+
+```
+yarn
+```
+
+```
+yarn start
+```
+
+## Demo
+
+<img src="./public/401wyw.gif" width="360px">
 
 ## TODO
 
-- create a button to clear the grid
-- perf optimizations
-- refactor grid evaluation logic into a custom hook
-- style
-- input boxes to set custom grid size
+- some more styling
 - dropdown to select generation speed
 - maybe do something intresting with ML? (because why not)
 - some info on cell generation, etc..
-- Host on the cloud
+- Host on github pages
