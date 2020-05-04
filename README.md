@@ -1,4 +1,4 @@
-![GOF](https://imgflip.com/gif/401wyw)
+![Game Of Life](https://imgflip.com/gif/401wyw)
 
 ## TODO
 
